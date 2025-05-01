@@ -1,5 +1,5 @@
 # Nexus Mods Fan-Made Discord Bot
-Welcome to the **Nexus Mods Discord Bot (Python)**! This is a fan made bot written in Python that provides seamless integration with Nexus Mods to fetch and display the latest, trending, and popular mods for your favorite games. This bot allows users to interact with the Nexus Mods API to get mod information directly from Discord.
+This is a fan made bot written in Python that provides seamless integration with Nexus Mods to fetch and display the latest trending, and popular mods for your favorite games. This bot allows users to interact with the Nexus Mods API to get mod information directly from Discord.
 
 ## Features
 - **Trending Mods**: Fetch the top 10 trending mods for any supported game.
