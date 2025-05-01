@@ -1,19 +1,18 @@
 import discord
 from discord import app_commands
-from discord.ext import commands
 from discord.ui import Button, View
-import requests
+from utils.api_utils import fetch_updated_mods
 
 class UpdatedModsPaginator(View):
     def __init__(self, bot, interaction, mods, per_page=5):
         super().__init__()
         self.bot = bot
         self.interaction = interaction
-        self.mods = mods
+        self.mods = [mod for mod in mods if mod.get("status") == "published"]
         self.per_page = per_page
         self.current_page = 0
         self.author_id = interaction.user.id
-        self.total_pages = (len(mods) - 1) // per_page + 1
+        self.total_pages = (len(self.mods) - 1) // per_page + 1
 
         self.prev_button = Button(emoji="◀", style=discord.ButtonStyle.primary, disabled=True)
         self.next_button = Button(emoji="▶", style=discord.ButtonStyle.primary, disabled=self.total_pages <= 1)
@@ -38,12 +37,14 @@ class UpdatedModsPaginator(View):
             link = f"[**{name}**](https://www.nexusmods.com/{self.bot.current_game}/mods/{mod_id})"
             desc += f"{link} \n> {summary[:150]}... \n\n"
         embed.description = desc.strip()
+        embed.description = desc.strip()
         embed.add_field(name="\u200b", value=f"-# **Page {self.current_page + 1} / {self.total_pages}**", inline=False)
         embed.set_footer(text=self.bot.footer_text, icon_url=self.bot.user.avatar.url)
         embed.set_thumbnail(url="https://www.nexusmods.com/assets/images/nexus-logo.png")
         return embed
 
     async def update_buttons(self, interaction):
+        self.total_pages = (len([mod for mod in self.mods if mod.get("status") == "published"]) - 1) // self.per_page + 1
         self.prev_button.disabled = self.current_page == 0
         self.next_button.disabled = self.current_page >= self.total_pages - 1
         await interaction.response.edit_message(embed=self.get_embed(), view=self)
@@ -61,20 +62,13 @@ class UpdatedModsPaginator(View):
         await self.update_buttons(interaction)
 
 def setup(bot):
-    @bot.tree.command(name="updated-mods", description="Displays the latest updated mods from Nexus Mods.")
+    @bot.tree.command(name="updated-mods", description="Displays the top 10 latest updated mods from Nexus Mods.")
     @app_commands.describe(game="Enter the game domain (e.g., skyrimspecialedition, fallout4, etc.)")
     @bot.cmd_logger
     async def updated_mods(interaction: discord.Interaction, game: str):
         game = game.replace(" ", "").lower()
         try:
-            response = requests.get(f"https://api.nexusmods.com/v1/games/{game}/mods/latest_updated.json", headers=bot.api_headers)
-            if response.status_code == 404:
-                return await bot.error_embed(interaction, f"Game not found: {game}.")
-
-            if response.status_code != 200:
-                return await bot.error_embed(interaction, "Failed to fetch mods from Nexus Mods API.")
-
-            mods = response.json()
+            mods = await fetch_updated_mods(game, bot.api_headers)
             if not mods:
                 embed = discord.Embed(title=f"No Mods Found for {game}", description="No updated mods are currently available.", color=bot.embed_color)
                 embed.set_footer(text=bot.footer_text, icon_url=bot.user.avatar.url)
