@@ -17,6 +17,11 @@ def setup(bot):
 
             embed = discord.Embed(description=f"### [{game_data.get("name", "Unknown Game")}](https://www.nexusmods.com/{game})", color=bot.embed_color)
             embed.add_field(name="Genre", value=game_data.get("genre", "N/A"), inline=True)
+            categories = game_data.get("categories", [])
+            if categories:
+                cat_list = [cat.get("name", "Unnamed") for cat in categories][:3]
+                formatted = ", ".join(cat_list)
+                embed.add_field(name="Categories", value=f"{formatted} ({len(cat_list)})", inline=True)
             embed.add_field(name="Mods", value=bot.bot_functions.abbreviate_number(game_data.get("mods", 0)), inline=True)
             embed.add_field(name="Downloads", value=bot.bot_functions.abbreviate_number(game_data.get("downloads", 0)), inline=True)
             embed.add_field(name="File Count", value=bot.bot_functions.abbreviate_number(game_data.get("file_count", 0)), inline=True)
