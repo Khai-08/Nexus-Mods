@@ -39,7 +39,6 @@ class LatestModsPaginator(View):
         embed.description = desc.strip()
         embed.add_field(name="\u200b", value=f"-# **Page {self.current_page + 1} / {self.total_pages}**", inline=False)
         embed.set_footer(text=self.bot.footer_text, icon_url=self.bot.user.avatar.url)
-        embed.set_thumbnail(url="https://www.nexusmods.com/assets/images/nexus-logo.png")
         return embed
     
     async def update_buttons(self, interaction):
@@ -71,7 +70,6 @@ def setup(bot):
             if not mods:
                 embed = discord.Embed(title=f"No Mods Found for {game}", description="No latest mods are currently available.", color=bot.embed_color)
                 embed.set_footer(text=bot.footer_text, icon_url=bot.user.avatar.url)
-                embed.set_thumbnail(url="https://www.nexusmods.com/assets/images/nexus-logo.png")
                 return await interaction.response.send_message(embed=embed, ephemeral=False)
 
             bot.current_game = game
