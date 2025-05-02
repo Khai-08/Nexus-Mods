@@ -12,7 +12,7 @@ def setup(bot):
         try:
             mod_data = await fetch_mod_by_game(game, mod_id, bot.api_headers)
             if not mod_data:
-                return await bot.error_embed(interaction, f"No mod found for Game Domain: `{game}` and Mod ID: `{mod_id}`.")
+                return await bot.error_embed(interaction, f"No `{mod_id}` found for `{game}`.")
             
             updatedTime, createdTime = mod_data.get("updated_time"), mod_data.get("created_time")
             updatedTimestamp = f"<t:{int(datetime.fromisoformat(updatedTime.replace('Z', '+00:00')).timestamp())}:R>" if updatedTime else "Unknown"
