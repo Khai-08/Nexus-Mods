@@ -103,9 +103,6 @@ class NexusMod(commands.Bot):
         else:
             await ctx_or_interaction.reply(embed=embed, mention_author=False)
 
-    async def success_embed(self, ctx_or_interaction, message: str):
-        await self.send_embed(ctx_or_interaction, message, discord.Color.green())
-
     async def warning_embed(self, ctx_or_interaction, message: str):
         await self.send_embed(ctx_or_interaction, message, discord.Color.orange())
 
