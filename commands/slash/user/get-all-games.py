@@ -62,9 +62,7 @@ def setup(bot):
         try:
             games = await fetch_all_games(bot.api_headers)
             if not games:
-                embed = discord.Embed(title="No Games Found", description="Failed to fetch games from Nexus Mods.", color=bot.embed_color)
-                embed.set_footer(text=bot.footer_text, icon_url=bot.user.avatar.url)
-                return await interaction.response.send_message(embed=embed, ephemeral=False)
+                return await bot.error_embed(interaction, f"Failed to fetch games from Nexus Mods.")
 
             view = GamesListPaginator(bot, interaction, games)
             await interaction.response.send_message(embed=view.get_embed(), view=view)
