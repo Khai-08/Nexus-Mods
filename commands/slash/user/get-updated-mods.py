@@ -69,9 +69,7 @@ def setup(bot):
         try:
             mods = await fetch_updated_mods(game, bot.api_headers)
             if not mods:
-                embed = discord.Embed(title=f"No Mods Found for {game}", description="No updated mods are currently available.", color=bot.embed_color)
-                embed.set_footer(text=bot.footer_text, icon_url=bot.user.avatar.url)
-                return await interaction.response.send_message(embed=embed, ephemeral=False)
+                return await bot.error_embed(interaction, f"No updated mods availabe for {game}.")
 
             bot.current_game = game
             if len(mods) > 5:
