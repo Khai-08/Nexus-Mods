@@ -11,9 +11,7 @@ def setup(bot):
         try:
             game_data = await fetch_game(game, bot.api_headers)
             if not game_data:
-                embed = discord.Embed(title=f"Game Not Found", description=f"No data found for game domain: `{game}`.", color=discord.Color.orange())
-                embed.set_footer(text=bot.footer_text, icon_url=bot.user.avatar.url)
-                return await interaction.response.send_message(embed=embed, ephemeral=False)
+                return await bot.error_embed(interaction, f"No data found for `{game}` game domain.")
 
             embed = discord.Embed(description=f"### [{game_data.get("name", "Unknown Game")}](https://www.nexusmods.com/{game})", color=bot.embed_color)
             embed.add_field(name="Genre", value=game_data.get("genre", "N/A"), inline=True)
