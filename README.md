@@ -19,7 +19,7 @@ This is a fan made bot written in Python that provides seamless integration with
   ```
 3. To get your own API Key, follow these steps:
    1. Register/Login to [Nexus Mods](https://www.nexusmods.com/users/myaccount?tab=api%20access)
-   2. Navigate to **Nexus Mod Integration*** under Integrations.
+   2. Navigate to **Nexus Mod Integration** under Integrations.
    3. Request API Key.
 4. Install requirements:
   ```bash
