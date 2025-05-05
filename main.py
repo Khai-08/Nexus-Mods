@@ -1,4 +1,4 @@
-import os, sys, time, discord, requests, importlib.util
+import os, sys, time, discord, importlib.util
 
 from discord import app_commands
 from discord.ext import commands
@@ -16,7 +16,6 @@ class NexusMod(commands.Bot):
         if not self.bot_token:
             raise ValueError("BOT_TOKEN not found in environment variables. Please ensure it is set in the .env file.")
         
-        self.global_settings = ConfigurationUtils.load_config(os.path.join('config', 'global_settings.json'))
         self.bot_config = ConfigurationUtils.load_config(os.path.join('config', 'bot_config.json'))
 
         self.embed_color = discord.Color.from_rgb(219, 142, 52)
@@ -58,12 +57,7 @@ class NexusMod(commands.Bot):
 
     def get_prefix_func(self):
         async def dynamic_prefix(bot, message):
-            guild_id = message.guild.id if message.guild else None
-            if guild_id:
-                guild_settings = self.config_functions.load_global_settings(self.global_settings, guild_id)
-                return guild_settings.get("prefix", ".")
-            return "."
-        
+            return self.bot_config.get("prefix")
         return dynamic_prefix
 
     def run(self):
